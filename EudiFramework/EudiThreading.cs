@@ -87,7 +87,7 @@ namespace EudiFramework
                             var worker = workerTask.Workers[i];
                             worker.ForceWorkerUpdate(updateEvent);
                         }
-                        await Task.Delay(6);
+                        await Task.Delay(workerTask.RefreshRate);
                     }
                 }
                 catch (Exception ex)
