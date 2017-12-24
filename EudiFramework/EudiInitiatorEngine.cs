@@ -14,7 +14,7 @@ namespace EudiFramework
     [DefaultExecutionOrder(-9999)]
     public class EudiInitiatorEngine : MonoBehaviour, IEudiInitiatorEngine
     {
-        [RuntimeInitializeOnLoadMethod]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Init()
         {
             var go = new GameObject("#RuntimeInitiator");

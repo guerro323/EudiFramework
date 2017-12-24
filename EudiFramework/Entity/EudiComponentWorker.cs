@@ -24,18 +24,25 @@ namespace EudiFramework
 
         public bool IsEnabled;
 
-        internal void ForceWorkerUpdate(int threadId)
+        internal void ForceWorkerUpdate(EudiWorkerUpdateEvent ev)
         {
-            if (IsEnabled)
-                WorkerUpdate(threadId); //< specify threadId for heavy task.
-            else
-                OffWorkUpdate(); //< no need to specify threadId, it's automatically 0 when off work.
+            WorkerUpdate(ev); //< specify threadId for heavy task.
+        }
+
+        /// <summary>
+        /// Will get call when a worker was added
+        /// </summary>
+        /// <param name="workerTask">The worker task</param>
+        /// <param name="firstCreation">Was the worker task just created?</param>
+        protected virtual void OnNewWorkerTask(WorkerTask workerTask, bool firstCreation)
+        {
+
         }
 
         /// <summary>
         /// Will get called when the worker is enabled
         /// </summary>
-        protected virtual void WorkerUpdate(int threadId)
+        protected virtual void WorkerUpdate(EudiWorkerUpdateEvent ev)
         {
 
         }
@@ -43,7 +50,7 @@ namespace EudiFramework
         /// <summary>
         /// Will get called when the worker isn't enabled
         /// </summary>
-        protected virtual void OffWorkUpdate()
+        protected virtual void OffWorkUpdate(int threadId, int workerId)
         {
 
         }
@@ -110,19 +117,24 @@ namespace EudiFramework
             m_threadCount = newValue;
         }
 
-        public void SetThreadShareParam(int threadId, ThreadGroup threadGroup)
+        public void SetThreadShareParam(int workId, ThreadGroup threadGroup)
         {
+            var firstCreation = false;
             WorkerTask task = null;
-            if (!threadGroup.Tasks.TryGetValue(threadId, out task))
+            if (!threadGroup.Tasks.TryGetValue(workId, out task))
             {
                 task = EudiThreading.CreateTask();
-                task.TaskId = threadId;
+                task.TaskId = workId;
 
-                threadGroup.Tasks[threadId] = task; 
+                threadGroup.Tasks[workId] = task;
+
+                firstCreation = true;
             }
 
             if (task != null)
             {
+                OnNewWorkerTask(task, firstCreation);
+
                 m_threadGroups.Add(threadGroup);
 
                 task.Workers.Add(this);

@@ -69,15 +69,30 @@ namespace EudiFramework
             workerTask.cancelToken = new CancellationTokenSource();
             workerTask.Task = new Task(async () =>
             {
-                while(!workerTask.cancelToken.IsCancellationRequested)
+                try
                 {
-                    var count = workerTask.Workers.Count;
-                    for (int i = 0; i < count; i++)
+                    var updateEvent = new EudiWorkerUpdateEvent() { WorkerTask = workerTask };
+
+                    while (!workerTask.cancelToken.IsCancellationRequested)
                     {
-                        var worker = workerTask.Workers[i];
-                        worker.ForceWorkerUpdate(workerTask.TaskId);
+                        updateEvent.Group = workerTask.Group;
+                        updateEvent.threadId = workerTask.Group?.MetaCreationGroupId ?? -1;
+                        updateEvent.workId = workerTask.TaskId;
+
+                        workerTask.ReplicaTime.Update();
+
+                        var count = workerTask.Workers.Count;
+                        for (int i = 0; i < count; i++)
+                        {
+                            var worker = workerTask.Workers[i];
+                            worker.ForceWorkerUpdate(updateEvent);
+                        }
+                        await Task.Delay(6);
                     }
-                    await Task.Delay(6);
+                }
+                catch (Exception ex)
+                {
+                    UnityEngine.Debug.LogError("[THREADING] TASK ERROR!\n" + ex.ToString());
                 }
             }, workerTask.cancelToken.Token);
             workerTask.IsWaitingForStart = true;

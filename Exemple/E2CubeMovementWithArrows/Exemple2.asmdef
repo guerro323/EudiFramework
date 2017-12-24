@@ -1,0 +1,9 @@
+{
+    "name": "Exemple2",
+    "references": [
+        "EudiFramework",
+        "MainExemple"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

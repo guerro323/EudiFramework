@@ -11,12 +11,17 @@ namespace EudiFramework.Threading
     {
         public bool IsWaitingForStart { get; internal set; }
         public Task Task;
+        public ThreadGroup Group;
         public CancellationTokenSource cancelToken;
         public int TaskId;
         public List<EudiComponentWorker> Workers = new List<EudiComponentWorker>();
+        public int RefreshRate = 6;
+        public WorkerTaskReplicaTime ReplicaTime = new WorkerTaskReplicaTime();
 
         public void Dispose()
         {
+            ReplicaTime = null;
+            Group = null;
             cancelToken.Cancel();
             Task.Dispose();
             Workers.Clear();
