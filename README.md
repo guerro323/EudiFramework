@@ -24,4 +24,5 @@ Properties:
 ![that an image](https://raw.githubusercontent.com/guerro323/EudiFramework/master/Images/BenchmarkE1_eudi_unity.png)  
 
 **Behaviour: Eudi Actor Behaviour, Synchronization Type: True multithreading**
+~10ms
 ![that an image](https://raw.githubusercontent.com/guerro323/EudiFramework/master/Images/BenchmarkE1_eudi_truethreading.png)
