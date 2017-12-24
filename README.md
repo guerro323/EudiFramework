@@ -12,8 +12,8 @@ The render part will not have any performance impact that would be caused by the
 ***
 
 The framework give two types for the synchronization type for workers threads:
-* Unity synchronization type: give access to Unity types but give a big impact on performance compared to the true multithreading.
-* True MultiTrheading synchronization type: more for performance but it don't give any access to the main-thread only Unity types.
+* Unity synchronization type: give access to Unity types but give a big impact on performance compared to the true multithreading, choose this if you want a worker that use Unity methods each frame.
+* True MultiTrheading synchronization type: more for performance but it don't give any access to the main-thread only Unity types, choose this if you want a worker that do **very very heavy** task.
 
 ## Replica time
 
