@@ -29,6 +29,7 @@ I've run some benchmark based on the scene of the first exemple (`E1StressTestCu
 Properties:  
 * 10 000 cubes
 * 1000 iteration for the heavy rotation work
+* 6ms refresh rate for workers
 
 **Behaviour: Unity Standard, Synchronization Type: Don't work on 'Unity Standard'**
 ~380ms
