@@ -11,10 +11,20 @@ namespace EudiFramework
     public class EudiGameObjectManager : MonoBehaviour, IEudiGameObjectManager
     {
         public List<EudiComponentBehaviour> ComponentsList = new List<EudiComponentBehaviour>();
+        private List<EudiComponentBehaviour> m_ComponentsWithFixedUpdate = new List<EudiComponentBehaviour>();
+        private List<EudiComponentBehaviour> m_ComponentsWithUpdate = new List<EudiComponentBehaviour>();
+        private List<EudiComponentBehaviour> m_ComponentsWithLateUpdate = new List<EudiComponentBehaviour>();
 
         public void OnNewEudiComponent(EudiComponentBehaviour component)
         {
             ComponentsList.Add(component);
+
+            if (ReflectionUtility.IsOverride(component, "UnityFixedUpdate"))
+                m_ComponentsWithFixedUpdate.Add(component);
+            if (ReflectionUtility.IsOverride(component, "UnityUpdate"))
+                m_ComponentsWithUpdate.Add(component);
+            if (ReflectionUtility.IsOverride(component, "UnityLateUpdate"))
+                m_ComponentsWithLateUpdate.Add(component);
         }
 
         public void OnRemoveEudiComponent(EudiComponentBehaviour component)
@@ -24,30 +34,30 @@ namespace EudiFramework
 
         public void FixedUpdate()
         {
-            var listCount = ComponentsList.Count;
+            var listCount = m_ComponentsWithFixedUpdate.Count;
             for (int i = 0; i < listCount; i++)
             {
-                var item = ComponentsList[i];
+                var item = m_ComponentsWithFixedUpdate[i];
                 item._DoFixedUpdate();
             }
         }
 
         public void Update()
         {
-            var listCount = ComponentsList.Count;
+            var listCount = m_ComponentsWithUpdate.Count;
             for (int i = 0; i < listCount; i++)
             {
-                var item = ComponentsList[i];
+                var item = m_ComponentsWithUpdate[i];
                 item._DoUpdate();
             }
         }
 
         public void LateUpdate()
         {
-            var listCount = ComponentsList.Count;
+            var listCount = m_ComponentsWithLateUpdate.Count;
             for (int i = 0; i < listCount; i++)
             {
-                var item = ComponentsList[i];
+                var item = m_ComponentsWithLateUpdate[i];
                 item._DoLateUpdate();
             }
         }

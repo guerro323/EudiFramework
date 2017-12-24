@@ -372,7 +372,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OriginalCube: {fileID: 1300856014}
   Cubes: 10000
-  HeavyRotationIteration: 1000
+  HeavyRotationIteration: 100
   BehaviourTestType: 0
 --- !u!1 &1906611530
 GameObject:

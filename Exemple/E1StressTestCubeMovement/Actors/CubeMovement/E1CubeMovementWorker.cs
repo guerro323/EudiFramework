@@ -58,7 +58,7 @@ namespace Assets.Exemple.Actors.CubeMovement
                 {
                     for (var i = 0; i < E1CubeMovementOnStart.HeavyWorkIteration; i++) //< heavy work right here
                     {
-                        m_yRot += (EudiReplicaTime.deltaTime * 0.008f) + Data.Offset * 0.0001f;
+                        m_yRot += (ev.WorkerTask.ReplicaTime.TimeDelta * 0.064f) + Data.Offset * 0.0001f;
                     }
 
                     m_eulerRotCached.y = m_yRot;
