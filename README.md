@@ -17,11 +17,11 @@ Properties:
 
 **Behaviour: Unity Standard, Synchronization Type: Don't work on 'Unity Standard'**
 ~380ms
-![that an image]()  
+![that an image](https://raw.githubusercontent.com/guerro323/EudiFramework/master/Images/BenchmarkE1_unity_unity.png)  
 
 **Behaviour: Eudi Actor Behaviour, Synchronization Type: Unity**
 ~155ms
-![that an image]()  
+![that an image](https://raw.githubusercontent.com/guerro323/EudiFramework/master/Images/BenchmarkE1_eudi_unity.png)  
 
 **Behaviour: Eudi Actor Behaviour, Synchronization Type: True multithreading**
-![that an image]()
+![that an image](https://raw.githubusercontent.com/guerro323/EudiFramework/master/Images/BenchmarkE1_eudi_truethreading.png)
