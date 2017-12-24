@@ -5,3 +5,23 @@ Imagine if you had a lot of entities that cause a lot of impact performance, mos
 
 Write all the logic in a Worker (also called as a Model or Controller), and the render in a component (also called Boss or View).
 The render part will not have any performance impact that would be caused by the heavy math thingy done in the logic part.  
+
+## Benchmark
+
+***
+
+I've run some benchmark based on the scene of the first exemple (`E1StressTestCubeMovement`):  
+Properties:  
+* 10 000 cubes
+* 1000 iteration for the heavy rotation work
+
+**Behaviour: Unity Standard, Synchronization Type: Don't work on 'Unity Standard'**
+~380ms
+![that an image]()  
+
+**Behaviour: Eudi Actor Behaviour, Synchronization Type: Unity**
+~155ms
+![that an image]()  
+
+**Behaviour: Eudi Actor Behaviour, Synchronization Type: True multithreading**
+![that an image]()
