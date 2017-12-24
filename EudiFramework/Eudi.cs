@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace EudiFramework
 {
     public class Eudi
@@ -18,5 +21,8 @@ namespace EudiFramework
         /// Is the application ending?
         /// </summary>
         public static bool ApplicationIsEnding { get; internal set; }
+
+        public static SynchronizationContext UnitySynchronizationContext { get; internal set; }
+        public static TaskScheduler UnityTaskScheduler { get; internal set; }
     }
 }

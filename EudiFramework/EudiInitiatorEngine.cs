@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ namespace EudiFramework
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Init()
         {
+            Eudi.UnitySynchronizationContext = SynchronizationContext.Current;
+            Eudi.UnityTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
             var go = new GameObject("#RuntimeInitiator");
             DontDestroyOnLoad(go);
             go.AddComponent<EudiInitiatorEngine>();

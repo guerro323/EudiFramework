@@ -4,10 +4,12 @@ using Assets.Exemple.Actors.CubeMovement;
 using System.Collections.Generic;
 using System.Collections;
 using Assets.Exemple.MonoBehaviours;
+using EudiFramework.Threading;
 
 public class E1CubeMovementOnStart : MonoBehaviour
 {
     public static int HeavyWorkIteration => singleton.HeavyRotationIteration;
+    public static EudiSynchronizationType SyncType => singleton.SynchronizationType;
 
     private static E1CubeMovementOnStart singleton;
 
@@ -21,6 +23,7 @@ public class E1CubeMovementOnStart : MonoBehaviour
     [Header("Properties")]
     public int Cubes = 10000;
     public int HeavyRotationIteration = 1000;
+    public EudiSynchronizationType SynchronizationType = EudiSynchronizationType.TrueMultiThreading;
     private List<GameObject> CubesToBind = new List<GameObject>();
 
     public TestType BehaviourTestType = TestType.EudiActorBehaviour;

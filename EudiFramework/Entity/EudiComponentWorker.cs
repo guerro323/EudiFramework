@@ -117,7 +117,7 @@ namespace EudiFramework
             m_threadCount = newValue;
         }
 
-        public void SetThreadShareParam(int workId, ThreadGroup threadGroup)
+        public void SetThreadShareParam(int workId, ThreadGroup threadGroup, EudiSynchronizationType syncType = EudiSynchronizationType.Unity)
         {
             var firstCreation = false;
             WorkerTask task = null;
@@ -133,6 +133,8 @@ namespace EudiFramework
 
             if (task != null)
             {
+                task.SynchronizationType = syncType;
+
                 OnNewWorkerTask(task, firstCreation);
 
                 m_threadGroups.Add(threadGroup);
@@ -150,7 +152,9 @@ namespace EudiFramework
                 if (workerTask.IsWaitingForStart)
                 {
                     workerTask.IsWaitingForStart = false;
-                    workerTask.Task.Start();
+                    workerTask.Task.Start(workerTask.SynchronizationType == EudiSynchronizationType.Unity 
+                        ? Eudi.UnityTaskScheduler
+                        : TaskScheduler.Default);
                 }
             }
         }

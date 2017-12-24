@@ -13,10 +13,6 @@ namespace EudiFramework
         {
             if (m == null)
                 return false;
-            if (m.GetBaseDefinition()?.DeclaringType == null)
-                return false;
-            if (m.DeclaringType == null)
-                return false;
 
             return m.GetBaseDefinition().DeclaringType != m.DeclaringType;
         }
@@ -28,7 +24,7 @@ namespace EudiFramework
                 return false;
             }
 
-            return IsOverride(obj.GetType().GetMethod(str));
+            return IsOverride(obj.GetType().GetMethod(str, BindingFlags.Instance | BindingFlags.NonPublic));
         }
     }
 }

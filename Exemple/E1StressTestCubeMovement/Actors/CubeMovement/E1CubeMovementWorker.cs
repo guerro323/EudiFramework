@@ -34,8 +34,8 @@ namespace Assets.Exemple.Actors.CubeMovement
             Data = data;
 
             SetThreadCount(2);
-            SetThreadShareParam(0, EudiThreading.GetThreadGroup<E1CubeMovementWorker>());
-            SetThreadShareParam(1, EudiThreading.GetThreadGroup<E1CubeMovementWorker>(1 + Time.frameCount % 2));
+            SetThreadShareParam(0, EudiThreading.GetThreadGroup<E1CubeMovementWorker>(), E1CubeMovementOnStart.SyncType);
+            SetThreadShareParam(1, EudiThreading.GetThreadGroup<E1CubeMovementWorker>(1 + Time.frameCount % 2), E1CubeMovementOnStart.SyncType);
         }
 
         protected override void WorkerUpdate(EudiWorkerUpdateEvent ev)

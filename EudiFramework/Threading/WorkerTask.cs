@@ -17,6 +17,7 @@ namespace EudiFramework.Threading
         public List<EudiComponentWorker> Workers = new List<EudiComponentWorker>();
         public int RefreshRate = 6;
         public WorkerTaskReplicaTime ReplicaTime = new WorkerTaskReplicaTime();
+        public EudiSynchronizationType SynchronizationType;
 
         public void Dispose()
         {
