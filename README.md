@@ -1,5 +1,5 @@
 # Eudi
-Eudi is framework for writing high performant multi-threaded code in Unity3D.  
+Eudi is a framework for writing high performant multi-threaded code in Unity3D.  
 
 Imagine if you had a lot of entities that cause a lot of impact performance, mostly because the logic script is eating a lot of the performance. It would be great if it was possible to have separate the logic and the render part, right? Then this framework is for you!  
 
