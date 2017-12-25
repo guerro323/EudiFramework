@@ -1,3 +1,5 @@
+WARNING: This framework isn't finished, and you need to know that everything can change and can be unstable at any time.
+
 # Eudi
 
 Eudi is a framework for writing high performant multi-threaded code in Unity3D.  
