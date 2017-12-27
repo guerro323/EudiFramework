@@ -21,16 +21,22 @@ public class E2CubeMovementComponent : EudiComponentBehaviour
 
     protected override void UnityUpdate()
     {
-        Debug.Log("hi");
-
+        // Set Input...
         DataInput.HorizontalValue = Input.GetAxis("Horizontal");
         DataInput.Speed = Speed;
-
         worker.DataInput = DataInput;
 
-        transform.position = contractPosition.Position;
-
         if (UseLock)
-            contractPosition.Unlock();
+        {
+            if (contractPosition.IsLocked) //< Locking is useful for getting variables in a safe way
+            {
+                transform.position = contractPosition.Position;
+                contractPosition.Unlock(); //< Unlock the contract
+            }
+        }
+        else
+        {
+            transform.position = contractPosition.Position;
+        }
     }
 }

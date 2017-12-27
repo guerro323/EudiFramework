@@ -53,12 +53,17 @@ namespace EudiFramework
         }
 
         /// <summary>
-        /// Bind an instance to a class
+        /// Bind an instance to a class, if it already exist for this binding, return the instance
         /// </summary>
         /// <typeparam name="BindShare"></typeparam>
         /// <typeparam name="BindInstance"></typeparam>
         public BindInstance Bind<BindShare, BindInstance>() where BindInstance : new()
         {
+            var bindingFound = GetBinding<BindShare>();
+            if (bindingFound != null
+            && bindingFound.GetType() == typeof(BindInstance))
+                return (BindInstance)(object)GetBinding<BindShare>();
+
             var type = typeof(BindShare);
             var binderType = typeof(BindInstance);
 
@@ -84,6 +89,12 @@ namespace EudiFramework
             {
                 UnityEngine.Debug.Log($"[IoC] instance({myInstance.GetType().Name}) from {bindShare.Name} was disposed!");
                 _stockTypes.Remove(bindShare);
+
+                // If it's a gameobject and we removed all binders, destroy the gameobject
+                if (!_stockTypes.ContainsValue(myInstance))
+                {
+                    UnityEngine.Object.Destroy((myInstance as MonoBehaviour).gameObject);
+                }
             }
         }
 

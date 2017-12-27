@@ -119,29 +119,37 @@ namespace EudiFramework
 
         public void SetThreadShareParam(int workId, ThreadGroup threadGroup, EudiSynchronizationType syncType = EudiSynchronizationType.Unity)
         {
-            var firstCreation = false;
-            WorkerTask task = null;
-            if (!threadGroup.Tasks.TryGetValue(workId, out task))
+            if (threadGroup.UseDefaultTasks)
             {
-                task = EudiThreading.CreateTask();
-                task.TaskId = workId;
+                var firstCreation = false;
+                WorkerTask task = null;
+                if (!threadGroup.Tasks.TryGetValue(workId, out task))
+                {
+                    task = EudiThreading.CreateTask();
+                    task.TaskId = workId;
 
-                threadGroup.Tasks[workId] = task;
+                    threadGroup.Tasks[workId] = task;
 
-                firstCreation = true;
+                    firstCreation = true;
+                }
+
+                if (task != null)
+                {
+                    task.SynchronizationType = syncType;
+
+                    OnNewWorkerTask(task, firstCreation);
+
+                    m_threadGroups.Add(threadGroup);
+
+                    task.Workers.Add(this);
+
+                    m_workerTasks.Add(task);
+                }
             }
-
-            if (task != null)
+            else
             {
-                task.SynchronizationType = syncType;
-
-                OnNewWorkerTask(task, firstCreation);
-
+                threadGroup.CreateFromWorker(this, workId, syncType);
                 m_threadGroups.Add(threadGroup);
-
-                task.Workers.Add(this);
-
-                m_workerTasks.Add(task);
             }
         }
 

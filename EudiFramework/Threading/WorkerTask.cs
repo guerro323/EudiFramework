@@ -15,7 +15,7 @@ namespace EudiFramework.Threading
         public CancellationTokenSource cancelToken;
         public int TaskId;
         public List<EudiComponentWorker> Workers = new List<EudiComponentWorker>();
-        public int RefreshRate = 6;
+        public EudiWorkerTaskUpdater Updater = new EudiWorkerTaskUpdater();
         public WorkerTaskReplicaTime ReplicaTime = new WorkerTaskReplicaTime();
         public EudiSynchronizationType SynchronizationType;
 

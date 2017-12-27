@@ -18,21 +18,18 @@ public class E2CubeMovementWorker : EudiComponentWorker
         DataInput = dataInput;
 
         SetThreadCount(1);
-        SetThreadShareParam(0, EudiThreading.GetThreadGroup<E2CubeMovementWorker>(), EudiSynchronizationType.Unity);
+        SetThreadShareParam(0, EudiThreading.GetThreadGroup<E2CubeMovementWorker>(), EudiSynchronizationType.TrueMultiThreading);
     }
 
     protected override async void OnNewWorkerTask(WorkerTask workerTask, bool firstCreation)
     {
         while (m_component == null)
             await Task.Delay(2);
-        workerTask.RefreshRate = m_component.UpdateTime;
     }
 
     protected override void WorkerUpdate(EudiWorkerUpdateEvent ev)
     {
         m_component = parent as E2CubeMovementComponent;
-
-        Debug.Log(ev.WorkerTask.ReplicaTime.TimeDelta + " / " + Time.deltaTime);
 
         if (m_component.UseLock)
         {
@@ -45,8 +42,6 @@ public class E2CubeMovementWorker : EudiComponentWorker
         else
         {
             ContractPosition.Position.x += DataInput.HorizontalValue * (Time.deltaTime * DataInput.Speed);
-
-            Debug.Log(DataInput.Speed);
         }
     }
 }

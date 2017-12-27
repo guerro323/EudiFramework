@@ -14,6 +14,9 @@ namespace EudiFramework.Threading
         public Dictionary<int, WorkerTask> Tasks = new Dictionary<int, WorkerTask>();
         public Type MetaCreationType;
         public int MetaCreationGroupId;
+        public virtual bool UseDefaultTasks => true;
+
+        public virtual void CreateFromWorker(EudiComponentWorker worker, int workId, EudiSynchronizationType type) { }
 
         public ThreadGroup(Type type, int groupId)
         {
@@ -30,7 +33,7 @@ namespace EudiFramework.Threading
             m_Groups.Remove(this);
         }
 
-        internal void NormalDispose()
+        virtual protected void NormalDispose()
         {
             foreach (var task in Tasks)
             {

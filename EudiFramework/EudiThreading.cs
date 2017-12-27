@@ -22,8 +22,9 @@ namespace EudiFramework
         /// </summary>
         /// <typeparam name="T">The class</typeparam>
         /// <param name="groupId">The group id (default is 0)</param>
+        /// <param name="existingGroup">If you created a group, you can use it here</param>
         /// <returns></returns>
-        public static ThreadGroup GetThreadGroup<T>(int groupId = 0)
+        public static ThreadGroup GetThreadGroup<T>(int groupId = 0, ThreadGroup existingGroup = null)
         {
             var type = typeof(T);
             Dictionary<int, ThreadGroup> dicoGroups = null;
@@ -40,7 +41,7 @@ namespace EudiFramework
             }
             else
             {
-                finalValue = new ThreadGroup(type, groupId);
+                finalValue = existingGroup ?? new ThreadGroup(type, groupId);
                 dicoGroups[groupId] = finalValue;
                 return finalValue;
             }
@@ -87,7 +88,14 @@ namespace EudiFramework
                             var worker = workerTask.Workers[i];
                             worker.ForceWorkerUpdate(updateEvent);
                         }
-                        await Task.Delay(workerTask.RefreshRate);
+
+                        if (workerTask.Updater.WaitAction == null)
+                            await Task.Delay(workerTask.Updater.RefreshRate);
+                        else
+                        {
+                            // init task...
+                            await workerTask.Updater.WaitAction();
+                        }
                     }
                 }
                 catch (Exception ex)

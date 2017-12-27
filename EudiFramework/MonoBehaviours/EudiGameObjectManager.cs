@@ -10,6 +10,9 @@ namespace EudiFramework
     [DefaultExecutionOrder(-9998)]
     public class EudiGameObjectManager : MonoBehaviour, IEudiGameObjectManager
     {
+        internal bool HasUnityUpdater = false;
+        internal EudiThreadGroupUnityUpdater LinkToUnityUpdater;
+        
         public List<EudiComponentBehaviour> ComponentsList = new List<EudiComponentBehaviour>();
         private List<EudiComponentBehaviour> m_ComponentsWithFixedUpdate = new List<EudiComponentBehaviour>();
         private List<EudiComponentBehaviour> m_ComponentsWithUpdate = new List<EudiComponentBehaviour>();
@@ -34,6 +37,9 @@ namespace EudiFramework
 
         public void FixedUpdate()
         {
+            if (HasUnityUpdater)
+                LinkToUnityUpdater.ManagerFixedUpdate();
+            
             var listCount = m_ComponentsWithFixedUpdate.Count;
             for (int i = 0; i < listCount; i++)
             {
@@ -44,6 +50,9 @@ namespace EudiFramework
 
         public void Update()
         {
+            if (HasUnityUpdater)
+                LinkToUnityUpdater.ManagerUpdate();
+            
             var listCount = m_ComponentsWithUpdate.Count;
             for (int i = 0; i < listCount; i++)
             {
@@ -54,6 +63,9 @@ namespace EudiFramework
 
         public void LateUpdate()
         {
+            if (HasUnityUpdater)
+                LinkToUnityUpdater.ManagerLateUpdate();
+            
             var listCount = m_ComponentsWithLateUpdate.Count;
             for (int i = 0; i < listCount; i++)
             {
