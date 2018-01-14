@@ -8,5 +8,10 @@ namespace EudiFramework
         {
             
         }
+
+        public void ForceUnityUpdate(EudiComponentBehaviour componentBehaviour)
+        {
+            componentBehaviour._DoUpdate();
+        }
     }
 }

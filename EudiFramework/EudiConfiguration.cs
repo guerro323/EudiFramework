@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EudiFramework
 {
-    public class EudiConfiguration
+    public class EudiConfiguration<TDependencyBase>
     {
         private Dictionary<Type, object> _stockTypes = new Dictionary<Type, object>();
         /// <summary>
@@ -17,7 +17,7 @@ namespace EudiFramework
         /// </summary>
         /// <typeparam name="BindShare">The interface that was used to bind the instance</typeparam>
         /// <returns>An instance that was binded to the interface</returns>
-        public BindShare GetBinding<BindShare>()
+        public BindShare GetBinding<BindShare>() where BindShare : TDependencyBase
         {
             var type = typeof(BindShare);
             object myInstance;
@@ -31,7 +31,7 @@ namespace EudiFramework
         /// </summary>
         /// <typeparam name="BindInstance">The instance type</typeparam>
         /// <returns>The binders type</returns>
-        public List<Type> SearchBindings<BindInstance>()
+        public List<Type> SearchBindings<BindInstance>() where BindInstance : TDependencyBase
         {
             var hasFoundAnyValue = false;
             List<Type> list = null;
@@ -57,7 +57,9 @@ namespace EudiFramework
         /// </summary>
         /// <typeparam name="BindShare"></typeparam>
         /// <typeparam name="BindInstance"></typeparam>
-        public BindInstance Bind<BindShare, BindInstance>() where BindInstance : new()
+        public BindInstance Bind<BindShare, BindInstance>() 
+            where BindShare : TDependencyBase
+            where BindInstance : TDependencyBase, new()
         {
             var bindingFound = GetBinding<BindShare>();
             if (bindingFound != null
@@ -65,18 +67,29 @@ namespace EudiFramework
                 return (BindInstance)(object)GetBinding<BindShare>();
 
             var type = typeof(BindShare);
-            var binderType = typeof(BindInstance);
+            var instanceType = typeof(BindInstance);
 
-            return (BindInstance)(_stockTypes[type] = binderType.IsSubclassOf(typeof(MonoBehaviour))
-                ? new GameObject("[BINDING]" + binderType.Name, binderType).GetComponent<BindInstance>()
-                : new BindInstance()); 
+            var instance = _stockTypes[type] = (instanceType.IsSubclassOf(typeof(MonoBehaviour))
+                ? new GameObject("[BINDING]" + instanceType.Name, instanceType).GetComponent<BindInstance>()
+                : new BindInstance());
+
+            return (BindInstance)instance;
+        }
+
+        public object SetBindingFromInstance<BindShare>(object instance)
+            where BindShare : TDependencyBase
+        {
+            var type = typeof(BindShare);
+            var instanceType = instance.GetType();
+            
+            return _stockTypes[type] = instance;
         }
 
         /// <summary>
         /// WIP METHOD (for now, it's just for removing the binding)
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void Dispose<BindShare>()
+        public void Dispose<BindShare>() where BindShare : TDependencyBase
         {
             var type = typeof(BindShare);
             Dispose(type);
@@ -102,7 +115,7 @@ namespace EudiFramework
         /// WIP METHOD (for now, it's just for removing the instance binders)
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void DisposeFromBinders<BindInstance>()
+        public void DisposeFromBinders<BindInstance>() where BindInstance : TDependencyBase
         {
             if (gc_BindingRemoval.Count >= 0)
                 gc_BindingRemoval.Clear();

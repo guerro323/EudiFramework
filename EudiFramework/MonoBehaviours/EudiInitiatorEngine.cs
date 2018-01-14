@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Experimental.LowLevel;
 
 namespace EudiFramework
 {
@@ -27,11 +28,19 @@ namespace EudiFramework
 
             var instance = Eudi.Globals.Bind<IEudiGameObjectManager, EudiGameObjectManager>();
             instance.transform.SetParent(go.transform);
+            
+            // Search for all systems and initialize them
+            var systems = GameObject.FindObjectsOfType<EudiSystemBehaviour>();
+            foreach (var system in systems)
+            {
+                system.InternalSystemAwake();
+            }
         }
 
         public void Awake()
         {
-            Eudi.Globals = new EudiConfiguration();
+            Eudi.Globals = new EudiConfiguration<object>();
+            Eudi.EntitiesManager = new EudiEntitiesManager();
             Eudi.Components = new EudiComponents();
         }
 

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Collections;
 using System;
 
 namespace EudiFramework
@@ -8,16 +7,44 @@ namespace EudiFramework
     /// <summary>
     /// Standard class that work like a standard <see cref="MonoBehaviour"/> component.
     /// </summary>
-    public class EudiComponentBehaviour : MonoBehaviour
+    public class EudiComponentBehaviour : EudiComponentBase
     {
         /// <summary>
         /// Get the list of the workers of this component
         /// </summary>
         public List<EudiComponentWorker> Workers = new List<EudiComponentWorker>();
 
-        private void Awake()
+        #region events
+        /// <summary>
+        /// Called before the behaviour get updated in Update loop
+        /// </summary>
+        public event Action BeforeUpdate;
+        /// <summary>
+        /// Called after the behaviour get updated in Update loop
+        /// </summary>
+        public event Action AfterUpdate;
+        /// <summary>
+        /// Called before the behaviour get updated in LateUpdate loop
+        /// </summary>
+        public event Action BeforeLateUpdate;
+        /// <summary>
+        /// Called after the behaviour get updated in LateUpdate loop
+        /// </summary>
+        public event Action AfterLateUpdate;
+        /// <summary>
+        /// Called before the behaviour get updated in FixedUpdate loop
+        /// </summary>
+        public event Action BeforeFixedUpdate;
+        /// <summary>
+        /// Called after the behaviour get updated in FixedUpdate loop
+        /// </summary>
+        public event Action AfterFixedUpdate;
+        #endregion
+
+        protected internal override void InternalAwake()
         {
             Eudi.Globals.GetBinding<IEudiGameObjectManager>().OnNewEudiComponent(this);
+            Eudi.EntitiesManager._initComponent(gameObject, this);
 
             UnityAwake();
             if (!ValidContracts())
@@ -33,21 +60,29 @@ namespace EudiFramework
 
         internal void _DoUpdate()
         {
+            BeforeUpdate?.Invoke();
             UnityUpdate();
+            AfterUpdate?.Invoke();
         }
 
         internal void _DoLateUpdate()
         {
+            BeforeLateUpdate?.Invoke();
             UnityLateUpdate();
+            AfterLateUpdate?.Invoke();
         }
 
         internal void _DoFixedUpdate()
         {
+            BeforeFixedUpdate?.Invoke();
             UnityFixedUpdate();
+            AfterFixedUpdate?.Invoke();
         }
 
-        private void OnDestroy()
+        protected internal override void InternalOnDestroy()
         {
+            base.InternalOnDestroy();
+            
             Eudi.Globals.GetBinding<IEudiGameObjectManager>().OnRemoveEudiComponent(this);
 
             var cleanFields = UnityOnDestroy();
@@ -78,6 +113,8 @@ namespace EudiFramework
             }
         }
 
+        internal protected virtual void InternalSystemAwake() {}
+        
         /// <summary>
         /// Get called by the unity event 'Awake'
         /// </summary>

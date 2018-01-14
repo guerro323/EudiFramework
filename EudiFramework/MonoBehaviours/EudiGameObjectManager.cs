@@ -33,6 +33,15 @@ namespace EudiFramework
         public void OnRemoveEudiComponent(EudiComponentBehaviour component)
         {
             ComponentsList.Remove(component);
+
+            if (m_ComponentsWithFixedUpdate.Contains(component))
+                m_ComponentsWithFixedUpdate.Remove(component);
+            if (m_ComponentsWithUpdate.Contains(component))
+                m_ComponentsWithUpdate.Remove(component);
+            if (m_ComponentsWithLateUpdate.Contains(component))
+                m_ComponentsWithLateUpdate.Remove(component);
+
+            Eudi.EntitiesManager._removeEntity(component.gameObject); //< we do a blind remove (the 'try remove' function will check if we can remove the entity)
         }
 
         public void FixedUpdate()
