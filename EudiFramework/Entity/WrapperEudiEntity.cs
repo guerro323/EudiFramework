@@ -7,17 +7,45 @@ namespace EudiFramework
 {
     public class WrapperEudiEntity : MonoBehaviour
     {
+        /// <summary>
+        /// Some sort of hack to know if we are on the same object, if not, destroy it
+        /// </summary>
+        [HideInInspector]
+        [SerializeField]
+        private int _currentGameObjectId;
+        
         public EudiEntity Instance;
 
         private void Awake()
         {
-            Instance = new EudiEntity(this);
+            if (Instance == null)
+            {
+                _currentGameObjectId = gameObject.GetInstanceID();
+                Instance = new EudiEntity(this);
+            }
+            else
+            {
+                Debug.Log(IsOnRightGameObject());
+                
+                Instance = null;
+                
+                DestroyImmediate(this); //< We use DestroyImmediate because we need to delete it right now, not after the frame.
+                
+                ThrowFakeException_DifferentGameObject();
+            }
         }
 
         private void OnDestroy()
         {
-            Eudi.EntitiesManager._removeEntity(gameObject);
+            // We can't allow the total destruction of an entity caused by copying a gameObject.
+            if (!IsOnRightGameObject())
+            {
+                Instance = null;
+                return;
+            }
             
+            Eudi.EntitiesManager._removeEntity(gameObject);
+
             Instance.Wrapper = null;
 
             Instance.Components.Clear();
@@ -31,6 +59,16 @@ namespace EudiFramework
 
             Instance = null;
         }
+
+        public void ThrowFakeException_DifferentGameObject()
+        {
+            Debug.LogWarning("Copying entities gameObject is a bad idea!\nYou should create them manually from code or by hand.\nComponents will automatically add back the entity.");
+        }
+
+        public bool IsOnRightGameObject()
+        {
+            return _currentGameObjectId == gameObject.GetInstanceID();
+        }
     }
 
     [Serializable]
@@ -40,11 +78,8 @@ namespace EudiFramework
 
         public EudiMap ComponentMap;
 
-        [NonSerialized]
         public List<Component> Components;
-        [NonSerialized]
         public List<EudiComponentBehaviour> EudiComponents;
-        [NonSerialized]
         public List<IShareableModule> SharedModules;
 
         public WrapperEudiEntity Wrapper;

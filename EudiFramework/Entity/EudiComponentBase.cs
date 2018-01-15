@@ -18,7 +18,19 @@ namespace EudiFramework
             {
                 Eudi.EntitiesManager._addEntity(gameObject); // add the entity component.
             }
-            
+            else
+            {
+                var wrapper = GetComponent<WrapperEudiEntity>();
+                if (!wrapper.IsOnRightGameObject())
+                {
+                    wrapper.ThrowFakeException_DifferentGameObject();
+                    DestroyImmediate(wrapper); //< We use DestroyImmediate because we need to delete it right now, not after the frame.
+
+                    //Add new wrapper...
+                    Eudi.EntitiesManager._addEntity(gameObject);
+                }
+            }
+
             EudiEntity = GetComponent<WrapperEudiEntity>().Instance;
             EudiEntityId = EudiEntity.Id;
             
