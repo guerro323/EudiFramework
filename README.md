@@ -1,3 +1,4 @@
+INFO: The ECS implementation is still in work; also the Factory implementation is still in heavy work.
 WARNING: This framework isn't finished, and you need to know that everything can change and can be unstable at any time.
 
 # Eudi
