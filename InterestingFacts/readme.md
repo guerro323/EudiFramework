@@ -1,4 +1,4 @@
-#Same struct reference with two arrays and unsafe.
+# Same struct reference with two arrays and unsafe.
 
 We have this struct:
 ```c#
