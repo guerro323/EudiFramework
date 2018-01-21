@@ -67,8 +67,7 @@ This will output:
 ```
 
 Unlike in the first exemple, we don't modify the value struct, we take a pointer to the struct in the stack and modify his value,  
-so it's applied globally, but it's a bit risky and the 'not pointer' variable 'testStruct' don't receive the change and if we modify it,  
-it doesn't apply the change on the pointers to the struct.
+so it's applied globally, but it's a bit risky and the 'not pointer' variable 'testStruct' don't receive the change and if we modify it, it doesn't apply the change on the pointers to the struct.
 
 **EDIT:**  
 I was wrong, it's possible to change the struct value by a ref parameter and apply the change to the pointers variant without changing them explicitely
