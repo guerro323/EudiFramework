@@ -1,3 +1,5 @@
+I don't work on this project anymore, I recommend to use Unity ECS instead.
+
 INFO: The ECS implementation is still in work; also the Factory implementation is still in heavy work (= no documentation for now).  
 WARNING: This framework isn't finished, and you need to know that everything can change and can be unstable at any time.
 
